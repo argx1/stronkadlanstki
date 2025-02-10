@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otwórz mnie</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            flex-direction: column;
+            transition: background 2s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .message {
+            font-size: 2em;
+            font-family: 'Dancing Script', cursive;
+            display: none;
+            position: relative;
+            z-index: 2;
+        }
+        canvas {
+            display: none;
+            position: relative;
+            z-index: 2;
+        }
+        .button {
+            background-color: red;
+            color: white;
+            font-size: 1.5em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: darkred;
+        }
+        .photo {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            background: white;
+            border: 5px solid #ddd;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            transform: rotate(var(--rotation));
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            border-radius: 10px;
+        }
+        #heartCanvas, #romanticText {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body id="body">
+    <h1 id="text">Sekundka, kochanie...</h1>
+    <button id="startButton" class="button">Kliknij mnie</button>
+    <canvas id="heartCanvas" width="400" height="400"></canvas>
+    <p class="message" id="romanticText">Talking to you makes everything feel better.</p>
+
+    <script>
+        document.getElementById("startButton").addEventListener("click", () => {
+            document.getElementById("text").style.display = "none";
+            document.getElementById("startButton").style.display = "none";
+            document.getElementById("heartCanvas").style.display = "block";
+            document.getElementById("body").style.background = "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://cdn.pixabay.com/photo/2016/11/18/14/33/paris-1836415_1280.jpg')";
+            document.getElementById("body").style.backgroundSize = "cover";
+            document.getElementById("body").style.backgroundPosition = "center";
+            drawHeart();
+            setTimeout(() => {
+                document.getElementById("romanticText").style.display = "block";
+                displayPhotos();
+            }, 1000);
+        });
+
+        function drawHeart() {
+            const canvas = document.getElementById("heartCanvas");
+            const ctx = canvas.getContext("2d");
+            ctx.translate(200, 200);
+            ctx.fillStyle = "red";
+            ctx.beginPath();
+            for (let i = 0; i < Math.PI * 2; i += 0.01) {
+                let x = 16 * Math.pow(Math.sin(i), 3) * 10;
+                let y = -(13 * Math.cos(i) - 5 * Math.cos(2 * i) - 2 * Math.cos(3 * i) - Math.cos(4 * i)) * 10;
+                ctx.lineTo(x, y);
+            }
+            ctx.fill();
+        }
+
+        function displayPhotos() {
+            const images = [
+                "Messenger_creation_1012F86D-0D04-4283-83A0-3CD7473B9733.jpg",
+                "Messenger_creation_1CBAEC26-342B-4741-8708-81535563D453.jpg",
+                "Messenger_creation_4F135DB8-6CEC-45A2-AF87-E51B4C0FE541.jpg",
+                "Messenger_creation_6462CAF5-CB75-446A-B044-B0206FA88318.jpg",
+                "Messenger_creation_6DFFABD7-BBD3-455A-B27D-CCC535671A1F.jpg",
+                "Messenger_creation_7F95520A-0D29-475E-AE89-EB5A16B6CC50.jpg",
+                "Messenger_creation_9144FEF8-87AB-44A5-9F4E-5E25740C7C66.jpg",
+                "Messenger_creation_C1D49F8A-E370-4044-8BDC-E7271E08C655.jpg",
+                "Messenger_creation_C71E469B-05C0-45CF-A8BA-DAC41B5777A3.jpg",
+                "Messenger_creation_E9697766-F2DB-4FF4-84A7-CA96AD8DDE2A.jpg",
+                "Messenger_creation_FDB745C8-03F1-4927-BEEE-85E40F0B8C36.jpg",
+                "Screenshot_20250210-155903_Photos.jpg",
+                "Screenshot_20250210-160037_Photos.jpg"
+            ];
+
+            images.forEach((src, index) => {
+                setTimeout(() => {
+                    const img = document.createElement("img");
+                    img.src = `png/${src}`;
+                    img.classList.add("photo");
+                    img.style.setProperty("--rotation", `${Math.random() * 20 - 10}deg`);
+                    img.style.top = `${Math.random() * 70 + 10}%`;
+                    img.style.left = `${Math.random() * 70 + 10}%`;
+                    document.body.appendChild(img);
+                    setTimeout(() => {
+                        img.style.opacity = "1";
+                    }, 100);
+                }, index * 500);
+            });
+        }
+    </script>
+</body>
+</html>
